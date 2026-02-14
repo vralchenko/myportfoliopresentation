@@ -1409,11 +1409,11 @@ function App() {
                                 </p>
                                 <div className="pt-8 flex flex-col items-center">
                                     <a
-                                        href="https://vralchenko.github.io/BizLingo/"
+                                        href="https://biz-lingo-chi.vercel.app/"
                                         target="_blank"
                                         className="bg-white p-4 rounded-2xl shadow-2xl hover:scale-105 transition duration-300 ring-4 ring-blue-500/20 group block relative"
                                     >
-                                        <QRCode value="https://vralchenko.github.io/BizLingo/" size={140} />
+                                        <QRCode value="https://biz-lingo-chi.vercel.app/" size={140} />
                                         <div className="text-black text-[11px] font-black mt-2 uppercase tracking-widest">{t.navBizLingo}</div>
                                     </a>
                                 </div>
@@ -1479,7 +1479,7 @@ function App() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     {[
                                         { title: "Flutter", desc: t.whyFlutter2, icon: <Smartphone />, color: "blue" },
-                                        { title: "WebLLM", desc: t.whyWebLLM2, icon: <Brain />, color: "purple" },
+                                        { title: "Groq AI", desc: t.whyWebLLM2, icon: <Brain />, color: "purple" },
                                         { title: "Flutter TTS", desc: t.whyTTS2, icon: <Volume2 />, color: "yellow" },
                                         { title: "SharedPreferences", desc: t.whySharedPrefs2, icon: <Hash />, color: "green" }
                                     ].map((item, idx) => (
@@ -1546,7 +1546,7 @@ function App() {
 
                                     <iframe
                                         ref={bizIframeRef}
-                                        src="https://vralchenko.github.io/BizLingo/"
+                                        src="https://biz-lingo-chi.vercel.app/"
                                         className="w-full h-full border-none"
                                         title="BizLingo Demo"
                                         onLoad={() => setBizIframeLoaded(true)}
