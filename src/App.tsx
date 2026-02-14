@@ -816,7 +816,7 @@ function App() {
                 const timer = setTimeout(() => {
                     setBizSimStarted(true);
                     send();
-                }, 5000); // Wait 5s for splash screen to disappear
+                }, 1000); // Now instant with Groq AI
                 return () => clearTimeout(timer);
             } else {
                 send();
