@@ -549,6 +549,7 @@ function App() {
             },
             p3: {
                 source: "Интеграция ИИ в наш рабочий процесс позволит автоматизировать рутинные задачи кодирования.",
+                approx: "Integration AI in our work process will let us to automate routine tasks of coding.",
                 exact: "Integrating AI into our workflow will automate routine coding tasks."
             }
         };
@@ -590,7 +591,7 @@ function App() {
             setIframeLoaded(false);
         }
         if (currentSlide === 15) {
-            setBizSimData(generateBizLingoData());
+            setBizSimData(generateBizLingoData()); // Reset data
             setDemoStep(0);
             setBizIframeLoaded(false);
             setBizSimStarted(false);
@@ -744,18 +745,23 @@ function App() {
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }],
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }],
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }],
+
                 // Phrase 2: Approx -> Exact
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p2.approx } }],
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }],
                 [{ action: 'SCROLL', payload: { direction: 'down', value: 300 } }],
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }],
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p2.exact } }],
                 [{ action: 'SUBMIT' }],
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }], // Audio after correct
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }],
-                // Phrase 3: Exact Match
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p3.exact } }],
+
+                // Phrase 3: Semantic (Approx -> Exact)
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p3.approx } }],
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }],
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }],
+                [{ action: 'SCROLL', payload: { direction: 'down', value: 300 } }],
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p3.exact } }],
+                [{ action: 'SUBMIT' }],
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }], // Audio after correct
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }]
             ];
 
@@ -764,23 +770,26 @@ function App() {
                 t.bizStatus2,
                 t.bizStatus3,
                 t.bizStatus4,
+
                 `${t.bizStatus5} "${bizSimData.p2.source}"`,
                 t.bizStatus6,
                 t.bizStatus7,
                 t.bizStatus8,
-                t.bizStatus9,
-                t.bizStatus10,
-                t.bizStatus11,
+                t.bizStatus14, // Audio
+                t.bizStatus11, // Next
+
                 `${t.bizStatus12} "${bizSimData.p3.source}"`,
-                t.bizStatus13,
-                t.bizStatus14,
-                t.bizStatus15
+                t.bizStatus6, // Checking semantic
+                t.bizStatus9, // Entering precise
+                t.bizStatus10, // Exact match
+                t.bizStatus14, // Audio
+                t.bizStatus15  // Finish
             ];
 
             const send = async () => {
                 const commandGroup = commands[demoStep];
                 if (commandGroup) {
-                    setSimStatus(statusMessages[demoStep]);
+                    setSimStatus(statusMessages[demoStep] || ""); // Safe fallback
 
                     const typingSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
                     typingSound.volume = 0.6;
