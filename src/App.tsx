@@ -731,7 +731,7 @@ function App() {
                     action: 'SCROLL',
                     payload: { direction: 'up' }
                 }, '*');
-                const timer = setTimeout(send, 3000); // Wait 3s for safe load
+                const timer = setTimeout(send, 1000); // Wait 1s for safe load
                 return () => clearTimeout(timer);
             } else {
                 send();
@@ -848,7 +848,7 @@ function App() {
             }
         }
         if (currentSlide === 15) {
-            if (demoStep < 14) {
+            if (demoStep < 17) {
                 setDemoStep(prev => prev + 1)
                 return
             }
