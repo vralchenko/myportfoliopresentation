@@ -748,45 +748,42 @@ function App() {
             const commands = [
                 // Phrase 1: Exact Match
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p1.exact } }],
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }],
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }],
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }],
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }], // Check
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }], // Audio
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }, { action: 'WAIT', payload: { duration: 1500 } }], // Next + Wait
 
                 // Phrase 2: Approx -> Exact
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p2.approx } }],
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }],
-                [{ action: 'SCROLL', payload: { direction: 'down', value: 300 } }],
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p2.exact } }],
-                [{ action: 'SUBMIT' }],
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }], // Audio after correct
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }],
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }], // Check semantic
+                // Instant update to exact
+                [{ action: 'SCROLL', payload: { direction: 'down', value: 300 } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p2.exact } }],
+                [{ action: 'SUBMIT' }], // Submit exact
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }], // Audio
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }, { action: 'WAIT', payload: { duration: 1500 } }], // Next + Wait
 
                 // Phrase 3: Semantic (Approx -> Exact)
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p3.approx } }],
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }],
-                [{ action: 'SCROLL', payload: { direction: 'down', value: 300 } }],
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p3.exact } }],
-                [{ action: 'SUBMIT' }],
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }], // Audio after correct
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }], // Check semantic
+                [{ action: 'SCROLL', payload: { direction: 'down', value: 300 } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p3.exact } }],
+                [{ action: 'SUBMIT' }], // Submit exact
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }], // Audio
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }]
             ];
 
             const statusMessages = [
                 `${t.bizStatus1} "${bizSimData.p1.source}"`,
                 t.bizStatus2,
-                t.bizStatus3,
-                t.bizStatus4,
+                t.bizStatus14, // Audio
+                t.bizStatus11, // Next
 
                 `${t.bizStatus5} "${bizSimData.p2.source}"`,
                 t.bizStatus6,
-                t.bizStatus7,
-                t.bizStatus8,
+                t.bizStatus10, // Exact
                 t.bizStatus14, // Audio
                 t.bizStatus11, // Next
 
                 `${t.bizStatus12} "${bizSimData.p3.source}"`,
                 t.bizStatus6, // Checking semantic
-                t.bizStatus9, // Entering precise
                 t.bizStatus10, // Exact match
                 t.bizStatus14, // Audio
                 t.bizStatus15  // Finish
@@ -801,7 +798,9 @@ function App() {
                     typingSound.volume = 0.6;
 
                     for (const cmd of commandGroup) {
-                        if (cmd.action === 'FILL_FIELD' && 'value' in (cmd.payload || {})) {
+                        if (cmd.action === 'WAIT') {
+                            await new Promise(resolve => setTimeout(resolve, (cmd.payload as any).duration));
+                        } else if (cmd.action === 'FILL_FIELD' && 'value' in (cmd.payload || {})) {
                             const text = (cmd.payload as any).value as string;
                             // Simulate human typing
                             for (let i = 1; i <= text.length; i++) {
@@ -854,7 +853,7 @@ function App() {
             }
         }
         if (currentSlide === 15) {
-            if (demoStep < 17) {
+            if (demoStep < 13) {
                 setDemoStep(prev => prev + 1)
                 return
             }
