@@ -539,17 +539,17 @@ function App() {
     const generateBizLingoData = () => {
         return {
             p1: {
-                source: "Использование машинного обучения поможет нам предсказывать поведение пользователей.",
-                exact: "Using machine learning will help us predict user behavior."
-            },
-            p2: {
-                source: "Интеграция ИИ в наш рабочий процесс позволит автоматизировать рутинные задачи кодирования.",
-                approx: "Integration AI in our work process will let us to automate routine tasks of coding.",
-                exact: "Integrating AI into our workflow will automate routine coding tasks."
-            },
-            p3: {
                 source: "Нам следует изучить возможности больших языковых моделей для улучшения поддержки клиентов.",
                 exact: "We should explore LLM capabilities to improve customer support."
+            },
+            p2: {
+                source: "Использование машинного обучения поможет нам предсказывать поведение пользователей.",
+                approx: "Usage of machine learning help us predict behavior of users.",
+                exact: "Using machine learning will help us predict user behavior."
+            },
+            p3: {
+                source: "Интеграция ИИ в наш рабочий процесс позволит автоматизировать рутинные задачи кодирования.",
+                exact: "Integrating AI into our workflow will automate routine coding tasks."
             }
         };
     }
@@ -816,7 +816,7 @@ function App() {
                 const timer = setTimeout(() => {
                     setBizSimStarted(true);
                     send();
-                }, 1000); // Now instant with Groq AI
+                }, 2500); // Delayed start for better sync
                 return () => clearTimeout(timer);
             } else {
                 send();
