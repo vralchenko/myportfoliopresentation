@@ -595,6 +595,12 @@ function App() {
             setDemoStep(0);
             setBizIframeLoaded(false);
             setBizSimStarted(false);
+            if (bizIframeRef.current?.contentWindow) {
+                bizIframeRef.current.contentWindow.postMessage({
+                    type: 'PRESENTATION_COMMAND',
+                    action: 'RESET_PROGRESS',
+                }, '*');
+            }
         }
     }, [currentSlide])
 
