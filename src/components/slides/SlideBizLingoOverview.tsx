@@ -14,7 +14,7 @@ const SlideBizLingoOverview: React.FC<SlideBizLingoOverviewProps> = ({ t }) => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.1 }}
-            className="w-full h-full flex flex-col items-center justify-start md:justify-center p-4 pt-24 md:p-8 overflow-y-auto no-scrollbar"
+            className="w-full h-full flex flex-col items-center justify-start md:justify-center p-4 pt-32 md:p-8 md:pt-40 overflow-y-auto no-scrollbar"
         >
             <div className="max-w-4xl w-full text-center space-y-6 md:space-y-8">
                 <div className="inline-block p-3 md:p-4 bg-blue-500/10 rounded-2xl md:rounded-3xl border border-blue-500/30 mb-2 md:mb-4 animate-pulse">

@@ -14,7 +14,7 @@ const SlideCareerOverview: React.FC<SlideCareerOverviewProps> = ({ t }) => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.1 }}
-            className="w-full h-full flex flex-col items-center justify-start md:justify-center p-4 pt-24 md:p-8 overflow-y-auto no-scrollbar"
+            className="w-full h-full flex flex-col items-center justify-start md:justify-center p-4 pt-32 md:p-8 overflow-y-auto no-scrollbar"
         >
             <div className="max-w-6xl flex flex-col md:flex-row items-center gap-8 md:gap-16">
                 <div className="flex-1 text-left w-full">
