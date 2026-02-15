@@ -61,7 +61,6 @@ function App() {
         if (currentSlide === 15) {
             setBizSimData(generateBizLingoData()); // Reset data
             setDemoStep(0);
-            setBizIframeLoaded(false);
             setBizSimStarted(false);
         }
     }, [currentSlide])
@@ -277,22 +276,23 @@ function App() {
                     setTimeout(() => {
                         setCurrentSlide(16);
                         setDemoStep(0);
-                    }, 3000); // Give user time to see the "Finish" message
+                    }, 7000); // Increased to 7s to give time for listening to the audio translation
                 }
             };
 
             if (demoStep === 0) {
+                // Send reset command immediately when loaded to avoid delayed reloads during typing
+                if (bizIframeRef.current?.contentWindow) {
+                    bizIframeRef.current.contentWindow.postMessage({
+                        type: 'PRESENTATION_COMMAND',
+                        action: 'RESET_PROGRESS',
+                    }, '*');
+                }
+
                 const timer = setTimeout(() => {
-                    // Force progress reset when demo starts to ensure 0/3 status
-                    if (bizIframeRef.current?.contentWindow) {
-                        bizIframeRef.current.contentWindow.postMessage({
-                            type: 'PRESENTATION_COMMAND',
-                            action: 'RESET_PROGRESS',
-                        }, '*');
-                    }
                     setBizSimStarted(true);
                     send();
-                }, 5000); // Increased initial delay to ensure iframe is fully loaded
+                }, 5000); // Wait for the app to be stable before typing
                 return () => clearTimeout(timer);
             } else {
                 send();
