@@ -218,7 +218,7 @@ function App() {
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }, { action: 'WAIT', payload: { duration: 1000 } }], // Transition
 
                 // Phrase 3: Semantic Match Pattern (Steps 6-7)
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p3.approx } }], // Synonyms
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p3.exact } }], // Use exact to ensure it passes
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }] // Finish
             ];
 
@@ -276,7 +276,7 @@ function App() {
                     setTimeout(() => {
                         setCurrentSlide(16);
                         setDemoStep(0);
-                    }, 7000); // Increased to 7s to give time for listening to the audio translation
+                    }, 10000); // Increased to 10s to give more time after the 3rd step
                 }
             };
 

@@ -15,7 +15,7 @@ const SlideIntro: React.FC<SlideIntroProps> = ({ t }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="w-full h-full flex flex-col items-center justify-start md:justify-center p-4 pt-12 md:pt-16 text-center overflow-y-auto no-scrollbar"
+            className="w-full h-full flex flex-col items-center justify-start md:justify-center p-4 pt-24 md:pt-16 text-center overflow-y-auto no-scrollbar"
         >
             <div className="flex flex-col items-center relative z-0">
                 <UserAvatar />
@@ -46,7 +46,7 @@ const SlideIntro: React.FC<SlideIntroProps> = ({ t }) => {
                     })}
                 </div>
 
-                <div className="flex flex-wrap gap-6 md:gap-12 justify-center pb-12">
+                <div className="flex flex-wrap gap-6 md:gap-12 justify-center pb-32 md:pb-12">
                     <a href="https://linkedin.com/in/victoralchenko/" target="_blank" className="bg-white p-3 md:p-4 rounded-xl shadow-2xl flex flex-col items-center hover:scale-105 transition duration-300">
                         <QRCode value="https://linkedin.com/in/victoralchenko/" size={120} className="md:w-[140px] md:h-[140px]" />
                         <div className="text-black text-[8px] md:text-[10px] font-bold mt-2 uppercase tracking-widest">{t.linkedin}</div>

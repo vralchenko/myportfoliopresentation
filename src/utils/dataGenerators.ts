@@ -25,12 +25,12 @@ export const generateBizLingoData = () => {
         },
         p2: {
             source: "Использование машинного обучения поможет нам предсказывать поведение пользователей.",
-            approx: "Usage of machine learning help us predict behavior of users.",
+            approx: "Using machine learning will help us to predict the user behavior.",
             exact: "Using machine learning will help us predict user behavior."
         },
         p3: {
             source: "Интеграция ИИ в наш рабочий процесс позволит автоматизировать рутинные задачи кодирования.",
-            approx: "Integration AI in our work process will let us to automate routine tasks of coding.",
+            approx: "AI integration into our workflow will enable us to automate routine coding tasks.",
             exact: "Integrating AI into our workflow will automate routine coding tasks."
         }
     };
