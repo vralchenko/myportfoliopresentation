@@ -63,12 +63,6 @@ function App() {
             setDemoStep(0);
             setBizIframeLoaded(false);
             setBizSimStarted(false);
-            if (bizIframeRef.current?.contentWindow) {
-                bizIframeRef.current.contentWindow.postMessage({
-                    type: 'PRESENTATION_COMMAND',
-                    action: 'RESET_PROGRESS',
-                }, '*');
-            }
         }
     }, [currentSlide])
 
@@ -214,40 +208,32 @@ function App() {
 
         if (currentSlide === 15 && bizIframeRef.current?.contentWindow && bizIframeLoaded) {
             const commands = [
-                // Phrase 1: Exact Match (Steps 0-3)
+                // Phrase 1: Exact Match (Steps 0-2)
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p1.exact } }],
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }], // Check
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }], // Audio
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }, { action: 'WAIT', payload: { duration: 1000 } }], // Transition
 
-                // Phrase 2: Semantic Match Pattern (Steps 4-7)
+                // Phrase 2: Semantic Match Pattern (Steps 3-5)
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p2.approx } }], // Synonyms
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }], // Check
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }], // Audio
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }, { action: 'WAIT', payload: { duration: 1000 } }], // Transition
 
-                // Phrase 3: Semantic Match Pattern (Steps 8-11)
+                // Phrase 3: Semantic Match Pattern (Steps 6-7)
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p3.approx } }], // Synonyms
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }], // Check
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }], // Audio
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }] // Finish
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }] // Finish
             ];
 
             const statusMessages = [
                 `${t.bizStatus1} "${bizSimData.p1.source}"`,
                 t.bizStatus2,
-                t.bizStatus14, // Audio
                 t.bizStatus11, // Transition
 
                 `${t.bizStatus5} "${bizSimData.p2.source}"`,
                 t.bizStatus6, // AI Semantic Analysis
-                t.bizStatus14, // Audio
                 t.bizStatus11, // Transition
 
                 `${t.bizStatus12} "${bizSimData.p3.source}"`,
-                t.bizStatus6, // AI Semantic Analysis
-                t.bizStatus14, // Audio
-                t.bizStatus15  // Finish
+                t.bizStatus15  // Completed
             ];
 
             const send = async () => {
@@ -287,7 +273,7 @@ function App() {
                 }
 
                 // Auto-advance to final slide after BizLingo simulation finishes
-                if (demoStep === 11) {
+                if (demoStep === 7) {
                     setTimeout(() => {
                         setCurrentSlide(16);
                         setDemoStep(0);
@@ -297,9 +283,16 @@ function App() {
 
             if (demoStep === 0) {
                 const timer = setTimeout(() => {
+                    // Force progress reset when demo starts to ensure 0/3 status
+                    if (bizIframeRef.current?.contentWindow) {
+                        bizIframeRef.current.contentWindow.postMessage({
+                            type: 'PRESENTATION_COMMAND',
+                            action: 'RESET_PROGRESS',
+                        }, '*');
+                    }
                     setBizSimStarted(true);
                     send();
-                }, 4500); // Increased initial delay for better user orientation
+                }, 5000); // Increased initial delay to ensure iframe is fully loaded
                 return () => clearTimeout(timer);
             } else {
                 send();
@@ -322,7 +315,7 @@ function App() {
             }
         }
         if (currentSlide === 15) {
-            if (demoStep < 11) {
+            if (demoStep < 7) {
                 setDemoStep(prev => prev + 1)
                 return
             }
