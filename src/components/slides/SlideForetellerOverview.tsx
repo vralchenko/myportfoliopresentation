@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
 import QRCode from 'react-qr-code';
 
 interface SlideForetellerOverviewProps {
@@ -17,10 +16,7 @@ const SlideForetellerOverview: React.FC<SlideForetellerOverviewProps> = ({ t }) 
             className="w-full h-full flex flex-col items-center justify-start md:justify-center p-4 pt-32 md:p-8 md:pt-40 overflow-y-auto no-scrollbar"
         >
             <div className="max-w-4xl w-full text-center space-y-6 md:space-y-8">
-                <div className="inline-block p-3 md:p-4 bg-purple-500/10 rounded-2xl md:rounded-3xl border border-purple-500/30 mb-2 md:mb-4 animate-bounce">
-                    <Sparkles size={48} className="text-purple-400 md:w-16 md:h-16" />
-                </div>
-                <h2 className="text-4xl md:text-7xl font-black text-white px-2 leading-tight">{t.flagship}</h2>
+                <h2 className="text-3xl md:text-5xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600 px-2 leading-tight tracking-tighter py-2">{t.flagship}</h2>
                 <p className="text-lg md:text-3xl text-gray-300 font-light leading-relaxed max-w-3xl mx-auto px-4">
                     {t.projectDesc}
                 </p>

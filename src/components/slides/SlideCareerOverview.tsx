@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Briefcase } from 'lucide-react';
 import QRCode from 'react-qr-code';
 
 interface SlideCareerOverviewProps {
@@ -18,12 +17,7 @@ const SlideCareerOverview: React.FC<SlideCareerOverviewProps> = ({ t }) => {
         >
             <div className="max-w-6xl flex flex-col md:flex-row items-center gap-8 md:gap-16">
                 <div className="flex-1 text-left w-full">
-                    <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
-                        <div className="p-3 md:p-4 bg-purple-500 rounded-2xl md:rounded-3xl shadow-[0_0_30px_rgba(168,85,247,0.4)]">
-                            <Briefcase className="text-white" size={24} />
-                        </div>
-                        <h2 className="text-3xl md:text-6xl font-black tracking-tight">{t.flagship3}</h2>
-                    </div>
+                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tighter leading-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400 py-2">{t.flagship3}</h2>
                     <p className="text-lg md:text-3xl text-gray-300 leading-relaxed font-light mb-6 md:mb-10">
                         {t.projectDesc3}
                     </p>

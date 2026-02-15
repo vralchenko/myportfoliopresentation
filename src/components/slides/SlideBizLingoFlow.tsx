@@ -13,7 +13,7 @@ const SlideBizLingoFlow: React.FC<SlideBizLingoFlowProps> = ({ t }) => {
             className="w-full h-full flex flex-col items-center justify-start md:justify-center p-8 pt-32 md:p-8 overflow-y-auto no-scrollbar"
         >
             <div className="max-w-5xl w-full">
-                <h2 className="text-4xl md:text-6xl font-black mb-8 md:mb-16 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">
+                <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-8 md:mb-16 text-center leading-tight py-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 tracking-tighter">
                     {t.feat3Title2}
                 </h2>
                 <div className="flex flex-col items-center gap-6 md:gap-8 pb-20 md:pb-0">

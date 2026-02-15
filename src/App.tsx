@@ -102,13 +102,13 @@ function App() {
                 if (commandGroup) {
                     setSimStatus(statusMessages[demoStep]);
                     const typingSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
-                    typingSound.volume = 0.6;
+                    typingSound.volume = 0.3;
 
                     for (const cmd of commandGroup) {
                         if (cmd.action === 'FILL_FIELD' && 'value' in (cmd.payload || {})) {
                             const text = (cmd.payload as any).value as string;
                             for (let i = 1; i <= text.length; i++) {
-                                await new Promise(resolve => setTimeout(resolve, 20 + Math.random() * 30));
+                                await new Promise(resolve => setTimeout(resolve, 50 + Math.random() * 50));
                                 typingSound.currentTime = 0;
                                 typingSound.play().catch(() => { });
                                 careerIframeRef.current!.contentWindow!.postMessage({ type: 'PRESENTATION_COMMAND', action: 'FILL_FIELD', payload: { ...(cmd.payload as any), value: text.substring(0, i) } }, '*');
@@ -171,13 +171,13 @@ function App() {
                     setSimStatus(statusMessages[demoStep]);
 
                     const typingSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
-                    typingSound.volume = 0.6;
+                    typingSound.volume = 0.3;
 
                     for (const cmd of commandGroup) {
                         if (cmd.action === 'FILL_FIELD' && 'value' in (cmd.payload || {})) {
                             const text = (cmd.payload as any).value as string;
                             for (let i = 1; i <= text.length; i++) {
-                                await new Promise(resolve => setTimeout(resolve, 30 + Math.random() * 40));
+                                await new Promise(resolve => setTimeout(resolve, 60 + Math.random() * 60));
 
                                 // Play sound
                                 typingSound.currentTime = 0;
@@ -214,45 +214,38 @@ function App() {
 
         if (currentSlide === 15 && bizIframeRef.current?.contentWindow && bizIframeLoaded) {
             const commands = [
-                // Phrase 1: Exact Match
+                // Phrase 1: Exact Match (Steps 0-3)
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p1.exact } }],
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }], // Check
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }], // Audio
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }, { action: 'WAIT', payload: { duration: 1500 } }], // Next + Wait
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }, { action: 'WAIT', payload: { duration: 1000 } }], // Transition
 
-                // Phrase 2: Approx -> Exact
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p2.approx } }],
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }], // Check semantic
-                // Instant update to exact
-                [{ action: 'SCROLL', payload: { direction: 'down', value: 300 } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p2.exact } }],
-                [{ action: 'SUBMIT' }], // Submit exact
+                // Phrase 2: Semantic Match Pattern (Steps 4-7)
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p2.approx } }], // Synonyms
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }], // Check
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }], // Audio
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }, { action: 'WAIT', payload: { duration: 1500 } }], // Next + Wait
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }, { action: 'WAIT', payload: { duration: 1000 } }], // Transition
 
-                // Phrase 3: Semantic (Approx -> Exact)
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p3.approx } }],
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }], // Check semantic
-                [{ action: 'SCROLL', payload: { direction: 'down', value: 300 } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p3.exact } }],
-                [{ action: 'SUBMIT' }], // Submit exact
+                // Phrase 3: Semantic Match Pattern (Steps 8-11)
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p3.approx } }], // Synonyms
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'check' } }, { action: 'SUBMIT' }], // Check
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'speaker' } }, { action: 'TOGGLE_AUDIO' }], // Audio
-                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }]
+                [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'next' } }, { action: 'NEXT' }] // Finish
             ];
 
             const statusMessages = [
                 `${t.bizStatus1} "${bizSimData.p1.source}"`,
                 t.bizStatus2,
                 t.bizStatus14, // Audio
-                t.bizStatus11, // Next
+                t.bizStatus11, // Transition
 
                 `${t.bizStatus5} "${bizSimData.p2.source}"`,
-                t.bizStatus6,
-                t.bizStatus10, // Exact
+                t.bizStatus6, // AI Semantic Analysis
                 t.bizStatus14, // Audio
-                t.bizStatus11, // Next
+                t.bizStatus11, // Transition
 
                 `${t.bizStatus12} "${bizSimData.p3.source}"`,
-                t.bizStatus6, // Checking semantic
-                t.bizStatus10, // Exact match
+                t.bizStatus6, // AI Semantic Analysis
                 t.bizStatus14, // Audio
                 t.bizStatus15  // Finish
             ];
@@ -263,7 +256,7 @@ function App() {
                     setSimStatus(statusMessages[demoStep] || ""); // Safe fallback
 
                     const typingSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
-                    typingSound.volume = 0.6;
+                    typingSound.volume = 0.3;
 
                     for (const cmd of commandGroup) {
                         if (cmd.action === 'WAIT') {
@@ -272,7 +265,7 @@ function App() {
                             const text = (cmd.payload as any).value as string;
                             // Simulate human typing
                             for (let i = 1; i <= text.length; i++) {
-                                await new Promise(resolve => setTimeout(resolve, 30 + Math.random() * 50));
+                                await new Promise(resolve => setTimeout(resolve, 60 + Math.random() * 60));
 
                                 // Play sound
                                 typingSound.currentTime = 0;
@@ -292,13 +285,21 @@ function App() {
                         }
                     }
                 }
+
+                // Auto-advance to final slide after BizLingo simulation finishes
+                if (demoStep === 11) {
+                    setTimeout(() => {
+                        setCurrentSlide(16);
+                        setDemoStep(0);
+                    }, 3000); // Give user time to see the "Finish" message
+                }
             };
 
             if (demoStep === 0) {
                 const timer = setTimeout(() => {
                     setBizSimStarted(true);
                     send();
-                }, 2500); // Delayed start for better sync
+                }, 4500); // Increased initial delay for better user orientation
                 return () => clearTimeout(timer);
             } else {
                 send();
@@ -314,14 +315,14 @@ function App() {
             }
         }
         if (currentSlide === 10) {
-            if (demoStep < 12) {
+            if (demoStep < 11) {
                 setSimData(generateRandomData())
                 setDemoStep(prev => prev + 1)
                 return
             }
         }
         if (currentSlide === 15) {
-            if (demoStep < 13) {
+            if (demoStep < 11) {
                 setDemoStep(prev => prev + 1)
                 return
             }

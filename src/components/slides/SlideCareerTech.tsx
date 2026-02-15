@@ -13,7 +13,7 @@ const SlideCareerTech: React.FC<SlideCareerTechProps> = ({ t }) => {
             className="w-full h-full flex flex-col items-center justify-start md:justify-center p-8 pt-32 md:p-8 overflow-y-auto no-scrollbar"
         >
             <div className="max-w-6xl w-full">
-                <h2 className="text-4xl md:text-5xl font-black mb-8 md:mb-16 text-center">{t.techTitle3}</h2>
+                <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-8 md:mb-16 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 tracking-tighter leading-tight py-2">{t.techTitle3}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 pb-20 md:pb-0">
                     {[
                         { title: "Next.js 16", desc: t.whyNext3, icon: <Monitor />, color: "black" },

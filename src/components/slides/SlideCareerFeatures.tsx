@@ -13,7 +13,7 @@ const SlideCareerFeatures: React.FC<SlideCareerFeaturesProps> = ({ t }) => {
             className="w-full h-full flex flex-col items-center justify-start md:justify-center p-8 pt-32 md:p-8 overflow-y-auto no-scrollbar"
         >
             <div className="max-w-6xl w-full">
-                <h2 className="text-4xl md:text-5xl font-black mb-8 md:mb-16 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400">
+                <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-8 md:mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 leading-tight tracking-tighter py-2">
                     {t.featuresTitle3}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 pb-20 md:pb-0">
