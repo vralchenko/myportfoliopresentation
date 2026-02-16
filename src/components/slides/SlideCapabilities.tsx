@@ -18,7 +18,7 @@ const SlideCapabilities: React.FC<SlideCapabilitiesProps> = ({ t }) => {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 pb-20 md:pb-0">
                     {[
-                        { title: t.capAnalysis, sub: "Powered by Groq Llama-4", icon: <Brain />, color: "purple" },
+                        { title: t.capAnalysis, sub: "High-Performance AI Analysis", icon: <Brain />, color: "purple" },
                         { title: t.capPdf, sub: "High-quality vector rendering", icon: <FileText />, color: "blue" },
                         { title: t.capAudio, sub: "Interactive Speech Synthesis", icon: <Volume2 />, color: "green" },
                         { title: t.capLangs, sub: "Fully localized experience", icon: <Languages />, color: "yellow" }
