@@ -19,7 +19,7 @@ const SlideCareerTech: React.FC<SlideCareerTechProps> = ({ t }) => {
                         { title: "Next.js 16", desc: t.whyNext3, icon: <Monitor />, color: "black" },
                         { title: "Groq Llama 3.1", desc: t.whyGroq3, icon: <Brain />, color: "orange" },
                         { title: "Puppeteer", desc: t.whyPuppeteer3, icon: <Terminal />, color: "green" },
-                        { title: "Railway (Docker)", desc: t.whyRender3, icon: <Server />, color: "blue" }
+                        { title: "Railway", desc: t.whyRender3, icon: <Server />, color: "blue" }
                     ].map((tech, i) => (
                         <div key={i} className="flex gap-4 md:gap-6 bg-slate-900/50 p-6 md:p-8 rounded-[2rem] border border-white/5 hover:bg-slate-900/80 transition group">
                             <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 group-hover:scale-110 transition">
