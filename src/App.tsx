@@ -281,19 +281,33 @@ function App() {
             };
 
             if (demoStep === 0) {
-                // Send reset command immediately when loaded to avoid delayed reloads during typing
-                if (bizIframeRef.current?.contentWindow) {
-                    bizIframeRef.current.contentWindow.postMessage({
-                        type: 'PRESENTATION_COMMAND',
-                        action: 'RESET_PROGRESS',
-                    }, '*');
-                }
+                // Send reset command repeatedly to ensure the app catches it
+                const sendReset = () => {
+                    if (bizIframeRef.current?.contentWindow) {
+                        bizIframeRef.current.contentWindow.postMessage({
+                            type: 'PRESENTATION_COMMAND',
+                            action: 'RESET_PROGRESS',
+                        }, '*');
+                    }
+                };
+
+                // Send immediately and a few times shortly after load
+                sendReset();
+                const t1 = setTimeout(sendReset, 500);
+                const t2 = setTimeout(sendReset, 1500);
+                const t3 = setTimeout(sendReset, 3000);
 
                 const timer = setTimeout(() => {
                     setBizSimStarted(true);
                     send();
                 }, 5000); // Wait for the app to be stable before typing
-                return () => clearTimeout(timer);
+
+                return () => {
+                    clearTimeout(t1);
+                    clearTimeout(t2);
+                    clearTimeout(t3);
+                    clearTimeout(timer);
+                };
             } else {
                 send();
             }
