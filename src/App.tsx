@@ -300,7 +300,7 @@ function App() {
                 const timer = setTimeout(() => {
                     setBizSimStarted(true);
                     send();
-                }, 5000); // Wait for the app to be stable before typing
+                }, 7000); // Wait for the app to be stable before typing
 
                 return () => {
                     clearTimeout(t1);
