@@ -14,6 +14,9 @@ import SlideCareerTech from './components/slides/SlideCareerTech'
 import SlideCareerDemo from './components/slides/SlideCareerDemo'
 import SlideForetellerOverview from './components/slides/SlideForetellerOverview'
 import SlideInnerSystems from './components/slides/SlideInnerSystems'
+import SlidePythagorasDeep from './components/slides/SlidePythagorasDeep'
+import SlideWesternDeep from './components/slides/SlideWesternDeep'
+import SlideChineseDeep from './components/slides/SlideChineseDeep'
 import SlideCapabilities from './components/slides/SlideCapabilities'
 import SlideTechStrategy from './components/slides/SlideTechStrategy'
 import SlideInteractiveDemo from './components/slides/SlideInteractiveDemo'
@@ -23,16 +26,18 @@ import SlideBizLingoFlow from './components/slides/SlideBizLingoFlow'
 import SlideBizLingoTech from './components/slides/SlideBizLingoTech'
 import SlideBizLingoDemo from './components/slides/SlideBizLingoDemo'
 import SlideThankYou from './components/slides/SlideThankYou'
+import { Volume2, VolumeX } from 'lucide-react'
 
 function App() {
     const [currentSlide, setCurrentSlide] = useState(0)
     const [demoStep, setDemoStep] = useState(0)
     const [lang, setLang] = useState<'en' | 'de' | 'ru' | 'ua'>('en')
+    const [isMuted, setIsMuted] = useState(true)
     const iframeRef = useRef<HTMLIFrameElement>(null)
 
     // Translations
     const t = translations[lang]
-    const totalSlides = 17
+    const totalSlides = 20
 
     const [simData, setSimData] = useState(generateRandomData());
     const [bizSimData, setBizSimData] = useState<any>(generateBizLingoData());
@@ -46,6 +51,48 @@ function App() {
     const [careerIframeLoaded, setCareerIframeLoaded] = useState(false)
     const [careerSimStarted, setCareerSimStarted] = useState(false)
 
+    // Music Manager Refs
+    const audioRef = useRef<HTMLAudioElement | null>(null)
+    const [currentTrack, setCurrentTrack] = useState<string | null>(null)
+
+    const musicTracks = {
+        career: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
+        foreteller: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3', // Slowly stretching ambient pads
+        bizlingo: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'
+    }
+
+    useEffect(() => {
+        let trackToPlay: string | null = null;
+        if (currentSlide >= 1 && currentSlide <= 5) trackToPlay = musicTracks.career;
+        else if (currentSlide >= 6 && currentSlide <= 13) trackToPlay = musicTracks.foreteller;
+        else if (currentSlide >= 14 && currentSlide <= 18) trackToPlay = musicTracks.bizlingo;
+
+        if (trackToPlay !== currentTrack) {
+            // Clean up old audio
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.src = "";
+                audioRef.current = null;
+            }
+
+            if (trackToPlay && !isMuted) {
+                const audio = new Audio(trackToPlay);
+                audio.loop = true;
+                audio.volume = 0.2;
+                audio.play().catch(e => console.warn("Autoplay blocked", e));
+                audioRef.current = audio;
+            }
+            setCurrentTrack(trackToPlay);
+        } else if (audioRef.current) {
+            // Sync current audio with mute state
+            if (isMuted) {
+                audioRef.current.pause();
+            } else {
+                audioRef.current.play().catch(() => { });
+            }
+        }
+    }, [currentSlide, isMuted, currentTrack]);
+
     useEffect(() => {
         if (currentSlide === 5) {
             setCareerData(generateCareerCoachData());
@@ -53,12 +100,12 @@ function App() {
             setCareerIframeLoaded(false);
             setCareerSimStarted(false);
         }
-        if (currentSlide === 10) {
+        if (currentSlide === 13) {
             setSimData(generateRandomData());
             setDemoStep(0);
             setIframeLoaded(false);
         }
-        if (currentSlide === 15) {
+        if (currentSlide === 18) {
             setBizSimData(generateBizLingoData()); // Reset data
             setDemoStep(0);
             setBizSimStarted(false);
@@ -94,16 +141,18 @@ function App() {
                 const commandGroup = commands[demoStep];
                 if (commandGroup) {
                     setSimStatus(statusMessages[demoStep]);
-                    const typingSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
-                    typingSound.volume = 0.3;
+                    const typingSound = !isMuted ? new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3') : null;
+                    if (typingSound) typingSound.volume = 0.3;
 
                     for (const cmd of commandGroup) {
                         if (cmd.action === 'FILL_FIELD' && 'value' in (cmd.payload || {})) {
                             const text = (cmd.payload as any).value as string;
                             for (let i = 1; i <= text.length; i++) {
                                 await new Promise(resolve => setTimeout(resolve, 50 + Math.random() * 50));
-                                typingSound.currentTime = 0;
-                                typingSound.play().catch(() => { });
+                                if (typingSound) {
+                                    typingSound.currentTime = 0;
+                                    typingSound.play().catch(() => { });
+                                }
                                 careerIframeRef.current!.contentWindow!.postMessage({ type: 'PRESENTATION_COMMAND', action: 'FILL_FIELD', payload: { ...(cmd.payload as any), value: text.substring(0, i) } }, '*');
                             }
                         } else {
@@ -124,7 +173,7 @@ function App() {
             }
         }
 
-        if (currentSlide === 10 && iframeRef.current?.contentWindow && iframeLoaded) {
+        if (currentSlide === 13 && iframeRef.current?.contentWindow && iframeLoaded) {
             const commands = [
                 // Steps 1-5: Forms
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'date' } }, { action: 'FILL_FIELD', payload: { name: 'date', value: simData.date } }],
@@ -163,8 +212,8 @@ function App() {
                 if (commandGroup) {
                     setSimStatus(statusMessages[demoStep]);
 
-                    const typingSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
-                    typingSound.volume = 0.3;
+                    const typingSound = !isMuted ? new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3') : null;
+                    if (typingSound) typingSound.volume = 0.3;
 
                     for (const cmd of commandGroup) {
                         if (cmd.action === 'FILL_FIELD' && 'value' in (cmd.payload || {})) {
@@ -173,8 +222,10 @@ function App() {
                                 await new Promise(resolve => setTimeout(resolve, 60 + Math.random() * 60));
 
                                 // Play sound
-                                typingSound.currentTime = 0;
-                                typingSound.play().catch(() => { });
+                                if (typingSound) {
+                                    typingSound.currentTime = 0;
+                                    typingSound.play().catch(() => { });
+                                }
 
                                 iframeRef.current!.contentWindow!.postMessage({
                                     type: 'PRESENTATION_COMMAND',
@@ -205,7 +256,7 @@ function App() {
             }
         }
 
-        if (currentSlide === 15 && bizIframeRef.current?.contentWindow && bizIframeLoaded) {
+        if (currentSlide === 18 && bizIframeRef.current?.contentWindow && bizIframeLoaded) {
             const commands = [
                 // Phrase 1: Exact Match (Steps 0-2)
                 [{ action: 'HIGHLIGHT_FIELD', payload: { name: 'input' } }, { action: 'FILL_FIELD', payload: { name: 'input', value: bizSimData.p1.exact } }],
@@ -240,8 +291,8 @@ function App() {
                 if (commandGroup) {
                     setSimStatus(statusMessages[demoStep] || ""); // Safe fallback
 
-                    const typingSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
-                    typingSound.volume = 0.3;
+                    const typingSound = !isMuted ? new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3') : null;
+                    if (typingSound) typingSound.volume = 0.3;
 
                     for (const cmd of commandGroup) {
                         if (cmd.action === 'WAIT') {
@@ -253,8 +304,10 @@ function App() {
                                 await new Promise(resolve => setTimeout(resolve, 60 + Math.random() * 60));
 
                                 // Play sound
-                                typingSound.currentTime = 0;
-                                typingSound.play().catch(() => { });
+                                if (typingSound) {
+                                    typingSound.currentTime = 0;
+                                    typingSound.play().catch(() => { });
+                                }
 
                                 bizIframeRef.current!.contentWindow!.postMessage({
                                     type: 'PRESENTATION_COMMAND',
@@ -274,7 +327,7 @@ function App() {
                 // Auto-advance to final slide after BizLingo simulation finishes
                 if (demoStep === 7) {
                     setTimeout(() => {
-                        setCurrentSlide(16);
+                        setCurrentSlide(19);
                         setDemoStep(0);
                     }, 10000); // Increased to 10s to give more time after the 3rd step
                 }
@@ -321,14 +374,14 @@ function App() {
                 return
             }
         }
-        if (currentSlide === 10) {
+        if (currentSlide === 13) {
             if (demoStep < 11) {
                 setSimData(generateRandomData())
                 setDemoStep(prev => prev + 1)
                 return
             }
         }
-        if (currentSlide === 15) {
+        if (currentSlide === 18) {
             if (demoStep < 7) {
                 setDemoStep(prev => prev + 1)
                 return
@@ -344,9 +397,9 @@ function App() {
     }
 
     const prevSlide = () => {
-        if (currentSlide === 5 || currentSlide === 10 || currentSlide === 15) {
+        if (currentSlide === 5 || currentSlide === 13 || currentSlide === 18) {
             if (demoStep > 0) {
-                if (currentSlide === 10) setSimData(generateRandomData())
+                if (currentSlide === 13) setSimData(generateRandomData())
                 setDemoStep(prev => prev - 1)
                 return
             }
@@ -388,8 +441,21 @@ function App() {
                     currentSlide={currentSlide}
                     setCurrentSlide={setCurrentSlide}
                     setDemoStep={setDemoStep}
+                    isMuted={isMuted}
+                    setIsMuted={setIsMuted}
                     t={t}
                 />
+
+                {/* Floating Sound Toggle */}
+                <button
+                    onClick={() => setIsMuted(!isMuted)}
+                    className="fixed bottom-32 right-8 z-[100] w-14 h-14 rounded-full bg-purple-600/20 backdrop-blur-xl border border-purple-500/30 flex items-center justify-center text-purple-400 hover:bg-purple-600 hover:text-white transition-all shadow-2xl group"
+                >
+                    {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
+                    <span className="absolute right-full mr-4 px-3 py-1 bg-slate-900 border border-white/10 rounded-lg text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                        {isMuted ? "Включити звук" : "Вимкнути звук"}
+                    </span>
+                </button>
 
                 <AnimatePresence mode="wait">
                     {currentSlide === 0 && <SlideIntro t={t} />}
@@ -409,9 +475,12 @@ function App() {
                     )}
                     {currentSlide === 6 && <SlideForetellerOverview t={t} />}
                     {currentSlide === 7 && <SlideInnerSystems t={t} />}
-                    {currentSlide === 8 && <SlideCapabilities t={t} />}
-                    {currentSlide === 9 && <SlideTechStrategy t={t} />}
-                    {currentSlide === 10 && (
+                    {currentSlide === 8 && <SlidePythagorasDeep t={t} />}
+                    {currentSlide === 9 && <SlideWesternDeep t={t} />}
+                    {currentSlide === 10 && <SlideChineseDeep t={t} />}
+                    {currentSlide === 11 && <SlideCapabilities t={t} />}
+                    {currentSlide === 12 && <SlideTechStrategy t={t} />}
+                    {currentSlide === 13 && (
                         <SlideInteractiveDemo
                             t={t}
                             iframeLoaded={iframeLoaded}
@@ -420,11 +489,11 @@ function App() {
                             iframeRef={iframeRef}
                         />
                     )}
-                    {currentSlide === 11 && <SlideBizLingoOverview t={t} />}
-                    {currentSlide === 12 && <SlideBizLingoFeatures t={t} />}
-                    {currentSlide === 13 && <SlideBizLingoFlow t={t} />}
-                    {currentSlide === 14 && <SlideBizLingoTech t={t} />}
-                    {currentSlide === 15 && (
+                    {currentSlide === 14 && <SlideBizLingoOverview t={t} />}
+                    {currentSlide === 15 && <SlideBizLingoFeatures t={t} />}
+                    {currentSlide === 16 && <SlideBizLingoFlow t={t} />}
+                    {currentSlide === 17 && <SlideBizLingoTech t={t} />}
+                    {currentSlide === 18 && (
                         <SlideBizLingoDemo
                             t={t}
                             bizIframeLoaded={bizIframeLoaded}
@@ -434,7 +503,7 @@ function App() {
                             setBizIframeLoaded={setBizIframeLoaded}
                         />
                     )}
-                    {currentSlide === 16 && <SlideThankYou t={t} />}
+                    {currentSlide === 19 && <SlideThankYou t={t} />}
                 </AnimatePresence>
 
                 <SideNavigation
