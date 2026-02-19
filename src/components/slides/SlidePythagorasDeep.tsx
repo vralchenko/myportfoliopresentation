@@ -4,15 +4,23 @@ import { Hash, Calculator, Play, RefreshCcw } from 'lucide-react';
 
 interface SlidePythagorasDeepProps {
     t: any;
+    demoStep: number;
 }
 
-const SlidePythagorasDeep: React.FC<SlidePythagorasDeepProps> = ({ t }) => {
+const SlidePythagorasDeep: React.FC<SlidePythagorasDeepProps> = ({ t, demoStep }) => {
     const [hoveredDigit, setHoveredDigit] = useState<number | null>(null);
     const [animationState, setAnimationState] = useState<'idle' | 'calculating' | 'filling'>('idle');
     const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(null);
     const [matrixCounts, setMatrixCounts] = useState<Record<number, number>>({
         1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0
     });
+
+    // Handle demoStep trigger
+    React.useEffect(() => {
+        if (demoStep === 1 && animationState === 'idle') {
+            startSimulation();
+        }
+    }, [demoStep]);
 
     // Full digit set: 1, 5, 0, 5, 1, 9, 8, 5 (date) + 3, 4 (34) + 7 + 3, 2 (32) + 5
     const calculationDigits = [1, 5, 0, 5, 1, 9, 8, 5, 3, 4, 7, 3, 2, 5];

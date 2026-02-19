@@ -32,7 +32,7 @@ function App() {
     const [currentSlide, setCurrentSlide] = useState(0)
     const [demoStep, setDemoStep] = useState(0)
     const [lang, setLang] = useState<'en' | 'de' | 'ru' | 'ua'>('en')
-    const [isMuted, setIsMuted] = useState(true)
+    const [isMuted, setIsMuted] = useState(false)
     const iframeRef = useRef<HTMLIFrameElement>(null)
 
     // Translations
@@ -387,6 +387,12 @@ function App() {
                 return
             }
         }
+        if (currentSlide === 8) {
+            if (demoStep < 1) {
+                setDemoStep(prev => prev + 1)
+                return
+            }
+        }
         if (currentSlide < totalSlides - 1) {
             setCurrentSlide(curr => {
                 const next = curr + 1;
@@ -397,7 +403,7 @@ function App() {
     }
 
     const prevSlide = () => {
-        if (currentSlide === 5 || currentSlide === 13 || currentSlide === 18) {
+        if (currentSlide === 5 || currentSlide === 8 || currentSlide === 13 || currentSlide === 18) {
             if (demoStep > 0) {
                 if (currentSlide === 13) setSimData(generateRandomData())
                 setDemoStep(prev => prev - 1)
@@ -475,7 +481,7 @@ function App() {
                     )}
                     {currentSlide === 6 && <SlideForetellerOverview t={t} />}
                     {currentSlide === 7 && <SlideInnerSystems t={t} />}
-                    {currentSlide === 8 && <SlidePythagorasDeep t={t} />}
+                    {currentSlide === 8 && <SlidePythagorasDeep t={t} demoStep={demoStep} />}
                     {currentSlide === 9 && <SlideWesternDeep t={t} />}
                     {currentSlide === 10 && <SlideChineseDeep t={t} />}
                     {currentSlide === 11 && <SlideCapabilities t={t} />}
