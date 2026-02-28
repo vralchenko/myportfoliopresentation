@@ -23,11 +23,11 @@ const SlideCareerOverview: React.FC<SlideCareerOverviewProps> = ({ t }) => {
                     </p>
                     <div className="flex gap-4 mb-8 md:mb-0 justify-center md:justify-start">
                         <a
-                            href="https://huggingface.co/spaces/vralchenko/AiCareerCoach"
+                            href="https://vralchenko-aicareercoach.hf.space/"
                             target="_blank"
                             className="bg-white p-3 md:p-4 rounded-xl shadow-2xl flex flex-col items-center hover:scale-105 transition duration-300 group"
                         >
-                            <QRCode value="https://huggingface.co/spaces/vralchenko/AiCareerCoach" size={120} className="md:w-[140px] md:h-[140px]" />
+                            <QRCode value="https://vralchenko-aicareercoach.hf.space/" size={120} className="md:w-[140px] md:h-[140px]" />
                             <div className="text-black text-[8px] md:text-[10px] font-bold mt-2 uppercase tracking-widest">{t.navCareer}</div>
                         </a>
                     </div>

@@ -61,7 +61,7 @@ const SlideCareerDemo: React.FC<SlideCareerDemoProps> = ({
                     )}
                     <iframe
                         ref={careerIframeRef}
-                        src="https://huggingface.co/spaces/vralchenko/AiCareerCoach"
+                        src="https://vralchenko-aicareercoach.hf.space/"
                         className="w-full h-full border-none"
                         title="AI Career Coach Demo"
                         onLoad={() => setCareerIframeLoaded(true)}
