@@ -13,7 +13,7 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ currentSlide, totalSlid
         <>
             {currentSlide > 0 && (
                 <button
-                    onClick={prevSlide}
+                    onClick={(e) => { e.stopPropagation(); prevSlide(); }}
                     className="absolute left-4 bottom-8 md:left-8 md:top-1/2 md:-translate-y-1/2 z-[100] p-3 md:p-4 rounded-full bg-slate-800/80 hover:bg-purple-600 border border-slate-700 hover:border-purple-500 text-white transition shadow-2xl active:scale-95"
                     aria-label="Previous slide"
                 >
@@ -23,7 +23,7 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ currentSlide, totalSlid
 
             {currentSlide < totalSlides - 1 && (
                 <button
-                    onClick={nextSlide}
+                    onClick={(e) => { e.stopPropagation(); nextSlide(); }}
                     className="absolute right-4 bottom-8 md:right-8 md:top-1/2 md:-translate-y-1/2 z-[100] p-3 md:p-4 rounded-full bg-slate-800/80 hover:bg-purple-600 border border-slate-700 hover:border-purple-500 text-white transition shadow-2xl active:scale-95"
                     aria-label="Next slide"
                 >

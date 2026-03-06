@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import './index.css'
 import { translations } from './translations'
@@ -367,7 +367,7 @@ function App() {
         }
     }, [demoStep, currentSlide, simData, bizSimData, iframeLoaded, bizIframeLoaded, careerIframeLoaded])
 
-    const nextSlide = () => {
+    const nextSlide = useCallback(() => {
         if (currentSlide === 5) {
             if (demoStep < 7) {
                 setDemoStep(prev => prev + 1)
@@ -400,9 +400,9 @@ function App() {
                 return next;
             })
         }
-    }
+    }, [currentSlide, demoStep])
 
-    const prevSlide = () => {
+    const prevSlide = useCallback(() => {
         if (currentSlide === 5 || currentSlide === 8 || currentSlide === 13 || currentSlide === 18) {
             if (demoStep > 0) {
                 if (currentSlide === 13) setSimData(generateRandomData())
@@ -417,17 +417,21 @@ function App() {
                 return prev;
             })
         }
-    }
+    }, [currentSlide, demoStep])
 
     // Keyboard Navigation
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                e.preventDefault()
+                e.stopPropagation()
+            }
             if (e.key === 'ArrowRight') nextSlide()
             if (e.key === 'ArrowLeft') prevSlide()
         }
-        window.addEventListener('keydown', handleKeyDown)
-        return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [currentSlide, demoStep])
+        window.addEventListener('keydown', handleKeyDown, { capture: true })
+        return () => window.removeEventListener('keydown', handleKeyDown, { capture: true })
+    }, [nextSlide, prevSlide])
 
     return (
         <div className="fixed inset-0 w-screen h-screen bg-[#0f0f13] text-white overflow-hidden font-sans selection:bg-purple-500 selection:text-white flex flex-col">

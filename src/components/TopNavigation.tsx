@@ -34,7 +34,8 @@ const TopNavigation: React.FC<TopNavigationProps> = ({ currentSlide, setCurrentS
                             return (
                                 <button
                                     key={slideIdx}
-                                    onClick={() => {
+                                    onClick={(e) => {
+                                        e.stopPropagation();
                                         setCurrentSlide(slideIdx);
                                         setDemoStep(0);
                                     }}
