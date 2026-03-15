@@ -28,8 +28,32 @@ import SlideBizLingoDemo from './components/slides/SlideBizLingoDemo'
 import SlideThankYou from './components/slides/SlideThankYou'
 import { Volume2, VolumeX } from 'lucide-react'
 
+// Anchor hash mapping: section name → first slide index
+const HASH_TO_SLIDE: Record<string, number> = {
+    '#intro': 0,
+    '#career': 1,
+    '#foreteller': 6,
+    '#bizlingo': 14,
+    '#finish': 19,
+}
+
+// Slide index → hash (maps each slide to its section anchor)
+function getHashForSlide(slide: number): string {
+    if (slide === 0) return '#intro'
+    if (slide >= 1 && slide <= 5) return '#career'
+    if (slide >= 6 && slide <= 13) return '#foreteller'
+    if (slide >= 14 && slide <= 18) return '#bizlingo'
+    if (slide === 19) return '#finish'
+    return '#intro'
+}
+
+function getSlideFromHash(): number {
+    const hash = window.location.hash.toLowerCase()
+    return HASH_TO_SLIDE[hash] ?? 0
+}
+
 function App() {
-    const [currentSlide, setCurrentSlide] = useState(0)
+    const [currentSlide, setCurrentSlide] = useState(() => getSlideFromHash())
     const [demoStep, setDemoStep] = useState(0)
     const [lang, setLang] = useState<'en' | 'de' | 'ru' | 'ua'>('en')
     const [isMuted, setIsMuted] = useState(false)
@@ -38,6 +62,25 @@ function App() {
     // Translations
     const t = translations[lang]
     const totalSlides = 20
+
+    // Sync URL hash with current slide
+    useEffect(() => {
+        const newHash = getHashForSlide(currentSlide)
+        if (window.location.hash !== newHash) {
+            history.replaceState(null, '', newHash)
+        }
+    }, [currentSlide])
+
+    // Handle browser back/forward and manual hash changes
+    useEffect(() => {
+        const onHashChange = () => {
+            const slide = getSlideFromHash()
+            setCurrentSlide(slide)
+            setDemoStep(0)
+        }
+        window.addEventListener('hashchange', onHashChange)
+        return () => window.removeEventListener('hashchange', onHashChange)
+    }, [])
 
     const [simData, setSimData] = useState(generateRandomData());
     const [bizSimData, setBizSimData] = useState<any>(generateBizLingoData());
